@@ -1,68 +1,304 @@
-function activateDevice(){
+async function activateDevice() {
+
+
 
     const imei =
+
         document.getElementById("imei").value;
 
+
+
     const device =
+
         document.getElementById("device").value;
 
+
+
     const activation =
+
         document.getElementById("activation").value;
-    
-    const activationId =
-    Math.floor(
-        Math.random()*1000000
-    );
+
+
 
     let results =
+
         document.getElementById("results");
 
-    if(imei.length !== 15 || isNaN(imei)){
+
+
+    if (
+
+        imei.length !== 15 ||
+
+        isNaN(imei)
+
+    ) {
+
+
 
         results.innerHTML =
+
         `
+
         <h3 class="error">
+
             Activation Failed
+
         </h3>
 
-        Invalid IMEI
+
+
+        <p>
+
+            IMEI must be exactly 15 digits.
+
+        </p>
+
         `;
 
+
+
         return;
+
     }
 
+
+
     results.innerHTML =
-`
-<h3 class="success">
-    Activation Successful
-</h3>
-<div class="status-badge">
-    ACTIVE
-</div>
-<p><strong>Device:</strong> ${device}</p>
 
-<p><strong>Activation Type:</strong> ${activation}</p>
+    `
 
-<p><strong>Activation ID:</strong> ACT-${activationId}</p>
+    <h3>
 
-<p><strong>Assigned Number:</strong> (214) 555-${Math.floor(1000 + Math.random() * 9000)}</p>
+        Processing Activation...
 
-<p><strong>ICCID:</strong> 89014103${Math.floor(1000000000 + Math.random() * 9000000000)}</p>
+    </h3>
 
-<hr>
 
-<p>&#10004; Device Validation</p>
 
-<p>&#10004; Network Compatibility Check</p>
+    <p>
 
-<p>&#10004; 5G Standalone Compatible</p>
+        Contacting Azure Function...
 
-<p>&#10004; VoLTE Provisioned</p>
+    </p>
 
-<p>&#10004; Subscriber Provisioning</p>
+    `;
 
-<p>&#10004; eSIM Profile Generated</p>
 
-<p>&#10004; Activation Complete</p>
-`;
+
+    try {
+
+
+
+        const response = await fetch(
+
+            "https://esim-activation-api-bhbrgpe6aeancrc2.centralus-01.azurewebsites.net/api/activate",
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    imei: imei,
+
+                    device: device,
+
+                    activationType: activation
+
+                })
+
+            }
+
+        );
+
+
+
+        const data = await response.json();
+
+
+
+        results.innerHTML =
+
+        `
+
+        <div class="status-badge">
+
+            5G ACTIVE
+
+        </div>
+
+
+
+        <h3 class="success">
+
+            Activation Successful
+
+        </h3>
+
+
+
+        <p>
+
+            <strong>Device:</strong>
+
+            ${data.device}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>Activation Type:</strong>
+
+            ${data.activationType}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>Activation ID:</strong>
+
+            ${data.activationId}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>Assigned Number:</strong>
+
+            ${data.phoneNumber}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>ICCID:</strong>
+
+            ${data.iccid}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>Status:</strong>
+
+            ${data.status}
+
+        </p>
+
+
+
+        <p>
+
+            <strong>Cloud Service:</strong>
+
+            ${data.cloudService}
+
+        </p>
+
+
+
+        <hr>
+
+
+
+        <h4>
+
+            Cloud Processing Pipeline
+
+        </h4>
+
+
+
+        <p>&#10004; Request Received</p>
+
+
+
+        <p>&#10004; Azure Function Triggered</p>
+
+
+
+        <p>&#10004; Device Validation Complete</p>
+
+
+
+        <p>&#10004; Network Compatibility Check</p>
+
+
+        <p>&#10004; Subscriber Provisioning</p>
+
+
+
+        <p>&#10004; Activation Record Generated</p>
+
+
+
+        <p>&#10004; Activation Complete</p>
+
+        `;
+
+
+
+    }
+
+    catch (error) {
+
+
+
+        console.error(error);
+
+
+
+        results.innerHTML =
+
+        `
+
+        <h3 class="error">
+
+            Activation Failed
+
+        </h3>
+
+
+
+        <p>
+
+            Unable to contact Azure Function.
+
+        </p>
+
+
+
+        <p>
+
+            Check browser console for details.
+
+        </p>
+
+        `;
+
+    }
+
 }
+
+
+
+
+
+
