@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>eSIM Activation Simulator</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>AT&T eSIM Activation Portal</h1>
+
+    <label>IMEI</label>
+    <input type="text" id="imei">
+
+    <label>Device</label>
+    <select id="device">
+        <option>iPhone 15</option>
+        <option>Samsung Galaxy S25</option>
+        <option>Google Pixel 9</option>
+    </select>
+
+    <label>Activation Type</label>
+    <select id="activation">
+        <option>eSIM</option>
+        <option>Physical SIM</option>
+    </select>
+
+    <button onclick="activateDevice()">
+        Activate
+    </button>
+
+    <div id="results"></div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
